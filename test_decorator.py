@@ -1,23 +1,15 @@
 ### Pythonのデコレータを理解するためのコード
 
 ## 函数内の同じ処理を行なっている部分をくくり出す。
-## ---> 函数内函数を導入する！！
+## ---> ついに「デコレータ」を導入する！！
 
-# メインの処理をする函数
-def operation():
-    print('メインの処理を行います。')
-
-def operation_2():
-    print('２つ目の処理を行います。')
-
-
-# 函数を引数に取る函数を定義して、同じ処理をくくり出す！
+# デコレータ処理（函数）の定義（outerをそのまま流用する。）
 def outer(func):
     # 函数内函数の定義
     def inner():
         print('==前処理を行います。==')
 
-        # 実際の処理（これも函数内函数であることに注意！）
+        # 被デコレート函数の処理
         func()
 
         print('==後処理を行います。==')
@@ -26,12 +18,19 @@ def outer(func):
     return inner
 
 
-if __name__ == "__main__":
-    # デコレータ処理を手動で行う。
-    # Flask本ではなぜこのリストがあるのかわからなかったが、
-    # 「入門Python3、O'Rilley」のデコレータの説明を読んで判った！
-    result = outer(operation)
-    result()
+# メインの処理をする函数（デコレータをつける）
+@outer
+def operation():
+    print('メインの処理を行います。')
 
-    result_2 = outer(operation_2)
-    result_2()
+@outer
+def operation_2():
+    print('２つ目の処理を行います。')
+
+
+if __name__ == "__main__":
+    # デコレータを利用したことで、普通の函数呼び出しと同じにできる！
+    # 実際に実行されるのは、outer()の戻り値である函数inner()となる。
+    operation()
+    print()
+    operation_2()
