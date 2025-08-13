@@ -20,7 +20,11 @@ def dynamic_default(value):
 @app.route('/dynamic2/<int:number>')
 def dynamic_converter(number):
     print(f'型：{type(number)}、値：{number}')
-    return f'<h2>渡された値は「{number}」です。</h2>'
+
+    if number % 2 == 0:
+        return f'<h2>渡された値{number}は偶数です。</h2>'
+    else:
+        return f'<h2>渡された値{number}は奇数です。</h2>'
 
 # コンバータあり、複数値渡し
 @app.route('/dynamic3/<value>/<int:number>')
